@@ -3,15 +3,16 @@
 Welcome to **LinkedIn Automate Comment**! This project leverages web scraping, sentiment analysis, and AI-driven text generation to automate meaningful LinkedIn interactions. 🎯
 
 ## Table of Contents
-- [✨ Project Overview](#project-overview)
-- [🏆 Featured In](#featured-in)
-- [⚙️ How It Works](#how-it-works)
-- [🔥 Features](#features)
-- [📂 Directory Structure](#directory-structure)
-- [🛠️ Setup and Installation](#setup-and-installation)
-- [🚀 Usage](#usage)
-- [🤝 Contributing](#contributing)
-- [📜 License](#license)
+- [Project Overview](#project-overview)
+- [Featured In](#featured-in)
+- [How It Works](#how-it-works)
+- [Features](#features)
+- [Directory Structure](#directory-structure)
+- [Setup and Installation](#setup-and-installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
 
 
 ## ✨ **Project Overview**
