@@ -1,6 +1,6 @@
-# 🚀 **LinkedIn Automate Comment**
+# 🚀 LinkedIn Automate Comment
 
-Welcome to **LinkedIn Automate Comment**! This project leverages web scraping, sentiment analysis, and AI-driven text generation to automate meaningful LinkedIn interactions. 🎯
+Welcome to **LinkedIn Automate Comment**! This project leverages **web scraping, sentiment analysis, and AI-driven text generation** to automate meaningful LinkedIn interactions. 🎯
 
 ## Table of Contents
 - [Project Overview](#project-overview)
@@ -13,20 +13,20 @@ Welcome to **LinkedIn Automate Comment**! This project leverages web scraping, s
 - [Contributing](#contributing)
 - [License](#license)
 
+---
 
-
-## ✨ **Project Overview**
+## Project Overview
 💡 **LinkedIn Automate Comment** simplifies professional networking by:
-✅ Scraping LinkedIn posts from your feed.
-✅ Performing sentiment analysis on posts and comments.
-✅ Generating AI-powered, context-aware comments.
-✅ Automating the posting of comments on LinkedIn.
+- ✅ Scraping LinkedIn posts from your feed.
+- ✅ Performing sentiment analysis on posts and comments.
+- ✅ Generating AI-powered, context-aware comments.
+- ✅ Automating the posting of comments on LinkedIn.
 
 Ideal for professionals who want to stay active on LinkedIn with **minimal effort!** 🚀
 
 ---
 
-## 🏆 `Featured In`
+## Featured In
 
 <div align="center">
 
@@ -38,20 +38,19 @@ Ideal for professionals who want to stay active on LinkedIn with **minimal effor
    </tr>
 </table>
 
-
 </div>
 
 ---
 
-## ⚙️ **How It Works** 🛠️
+## How It Works 🛠️
 1️⃣ **Scrape Posts:** `web_scrapper.py` logs into LinkedIn and collects posts.
-2️⃣ **Analyze Sentiment:** `anlyze.py` determines the tone of posts/comments.
+2️⃣ **Analyze Sentiment:** `analyze.py` determines the tone of posts/comments.
 3️⃣ **Generate Comments:** `llm.py` creates AI-powered, relevant responses.
 4️⃣ **Post Comments:** `test.py` automates comment posting via Selenium.
 
 ---
 
-## 🔥 **Features** ✨
+## Features ✨
 🎯 **Web Scraping:** Extracts LinkedIn posts efficiently.
 📊 **Sentiment Analysis:** Evaluates post/comment tone.
 🤖 **AI-Powered Comments:** Generates concise, relevant responses.
@@ -60,12 +59,12 @@ Ideal for professionals who want to stay active on LinkedIn with **minimal effor
 
 ---
 
-## 📂 **Directory Structure** 📁
+## Directory Structure 📁
 ```plaintext
 linkedin-automate-comment/
 ├── README.md                # Project documentation
 ├── web_scrapper.py          # Script to scrape LinkedIn posts
-├── anlyze.py                # Sentiment analysis script
+├── analyze.py               # Sentiment analysis script
 ├── llm.py                   # AI-powered comment generation
 ├── test.py                  # Automates LinkedIn commenting
 ├── linkedin_posts.csv       # Sample CSV for post data
@@ -73,14 +72,14 @@ linkedin-automate-comment/
 
 ---
 
-## 🛠️ **Setup and Installation** 📦
+## Setup and Installation 📦
 
-### **Prerequisites**
+### Prerequisites
 - 🐍 Python 3.8+
 - 🔑 Google API Key (for Generative AI)
 - 🌍 Chrome & ChromeDriver (ensure compatibility)
 
-### **Installation Steps**
+### Installation Steps
 1️⃣ Clone the repository:
    ```bash
    git clone https://github.com/hiteshydv001/linkedin-automate-comment.git
@@ -100,28 +99,28 @@ linkedin-automate-comment/
 
 ---
 
-## 🚀 **Usage** 🏁
+## Usage 🏁
 
-### **Step 1: Scrape LinkedIn Posts**
+### Step 1: Scrape LinkedIn Posts
 ```bash
 python web_scrapper.py
 ```
-### **Step 2: Perform Sentiment Analysis**
+### Step 2: Perform Sentiment Analysis
 ```bash
-python anlyze.py
+python analyze.py
 ```
-### **Step 3: Generate Comments**
+### Step 3: Generate Comments
 ```bash
 python llm.py
 ```
-### **Step 4: Post Comments**
+### Step 4: Post Comments
 ```bash
 python test.py
 ```
 
 ---
 
-## 🤝 **Contributing** 🌟
+## Contributing 🌟
 🎯 Contributions are **welcome!** Follow these steps:
 1. **Fork** the repository.
 2. Create a new branch:
@@ -140,7 +139,7 @@ python test.py
 
 ---
 
-## 📜 **License** ⚖️
+## License ⚖️
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
