@@ -27,6 +27,21 @@ This tool is ideal for professionals aiming to maintain an active LinkedIn prese
 
 ---
 
+## 🏆 `Featured In`
+
+<div align="center">
+
+<table>
+   <tr>
+      <td><img src="https://media.licdn.com/dms/image/v2/C560BAQEp7MUBpYE93g/company-logo_200_200/company-logo_200_200/0/1630672259441/jwoc_logo?e=2147483647&v=beta&t=wgkKrzLc-UxgSCnWShwkjn_zTXQnaa0_4cmbv4fN4PA" width="200" height="auto" loading="lazy" alt="jgec"/></td>
+      <td>Social Winter Of Code</td>
+      <td>Social Winter of Code is an initiative to introduce students to the open-source world, fostering collaboration and development.</td>
+   </tr>
+</table>
+
+
+</div>
+
 ## How It Works
 1. **Scrape Posts:**
    - The `web_scrapper.py` script logs into LinkedIn, collects the latest posts, and saves them for analysis.
