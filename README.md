@@ -5,14 +5,14 @@ Welcome to **LinkedIn Automate Comment**! This project leverages web scraping, s
 ---
 
 ## 📌 **Table of Contents**
-- [✨ Project Overview](#-project-overview)
-- [⚙️ How It Works](#-how-it-works)
-- [🔥 Features](#-features)
-- [📂 Directory Structure](#-directory-structure)
-- [🛠️ Setup and Installation](#-setup-and-installation)
-- [🚀 Usage](#-usage)
-- [🤝 Contributing](#-contributing)
-- [📜 License](#-license)
+- [✨ Project Overview](#project-overview)
+- [⚙️ How It Works](#how-it-works)
+- [🔥 Features](#features)
+- [📂 Directory Structure](#directory-structure)
+- [🛠️ Setup and Installation](#setup-and-installation)
+- [🚀 Usage](#usage)
+- [🤝 Contributing](#contributing)
+- [📜 License](#license)
 
 ---
 
