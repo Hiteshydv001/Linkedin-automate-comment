@@ -148,7 +148,9 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 🎉 **Enjoy automating your LinkedIn interactions with** `LinkedIn Automate Comment`! 🚀
 
 
+
 ## 📜 **Contributing Guide for specific purposes and competitons** ⚖️
+----
 Please refer to our 
 * [contribution.md](https://github.com/Hiteshydv001/Linkedin-automate-comment/blob/main/contribution.md) for general open source contribution
 * [JWoC guide](https://github.com/Hiteshydv001/Linkedin-automate-comment/blob/main/JWoC/Readme.md) for contribution under JGEC Winter of Code
