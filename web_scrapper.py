@@ -10,14 +10,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import undetected_chromedriver as uc
 from fpdf import FPDF  # Import FPDF for PDF generation
+from llm import generate_comment  # Import updated LLM function
 
-# Load environment variables from .env
+# Load environment variables
 load_dotenv()
-
-# Get credentials
 EMAIL = os.getenv("EMAIL")
 PASSWORD = os.getenv("PASSWORD")
-COMMENT_TEXT = "This is an automated comment. 🚀"
 
 
 def filter_bmp_characters(text):
@@ -55,7 +53,6 @@ def generate_pdf_report(results):
     pdf_output_path = "linkedin_comments_report.pdf"
     pdf.output(pdf_output_path)
     print(f"PDF report generated: {pdf_output_path}")
-
 
 
 def scrape_linkedin_posts():
@@ -97,7 +94,7 @@ def scrape_linkedin_posts():
         driver.quit()
 
 
-def automate_linkedin_comments(email, password, comment_text):
+def automate_linkedin_comments():
     options = Options()
     options.add_argument("--start-maximized")
     driver = uc.Chrome(options=options)
@@ -110,8 +107,8 @@ def automate_linkedin_comments(email, password, comment_text):
         driver.get("https://www.linkedin.com/login")
         time.sleep(2)
 
-        driver.find_element(By.ID, "username").send_keys(email)
-        driver.find_element(By.ID, "password").send_keys(password)
+        driver.find_element(By.ID, "username").send_keys(EMAIL)
+        driver.find_element(By.ID, "password").send_keys(PASSWORD)
         driver.find_element(By.XPATH, '//button[@type="submit"]').click()
         time.sleep(5)
 
@@ -133,7 +130,10 @@ def automate_linkedin_comments(email, password, comment_text):
         for idx, post in enumerate(posts[:5]):  # Limit to 5 posts
             try:
                 # Get post content for reference
-                post_content = post.text[:200]  # Extract first 200 characters for the CSV
+                post_content = post.text[:200]  # Extract first 200 characters for the report
+
+                # Generate AI-based comment using RAG
+                generated_comment = generate_comment(post_content)
 
                 # Click "See more" if it exists
                 try:
@@ -157,7 +157,7 @@ def automate_linkedin_comments(email, password, comment_text):
                 comment_box = post.find_element(By.XPATH, './/div[contains(@role, "textbox")]')
 
                 # Filter BMP characters and inject comment using JavaScript
-                filtered_comment_text = filter_bmp_characters(comment_text)
+                filtered_comment_text = filter_bmp_characters(generated_comment)
                 driver.execute_script("arguments[0].innerText = arguments[1];", comment_box, filtered_comment_text)
                 driver.execute_script(
                     "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", comment_box
@@ -188,6 +188,7 @@ def automate_linkedin_comments(email, password, comment_text):
         print(f"Automation complete. Generating PDF report.")
         generate_pdf_report(results)
 
+
 if __name__ == "__main__":
     print("Starting LinkedIn automation...")
-    automate_linkedin_comments(EMAIL, PASSWORD, COMMENT_TEXT)
+    automate_linkedin_comments()

@@ -5,6 +5,8 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.document_loaders import TextLoader
 from PyPDF2 import PdfReader
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -19,6 +21,20 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 # Path to the PDF file
 pdf_path = r"C:\Users\Asus\OneDrive\Desktop\linkedin automation\linkedin_posts_report.pdf"
 
+
+# Load RAG-based Knowledge Source
+def load_knowledge_base():
+    """Load documents into a FAISS-based RAG retriever."""
+    loader = TextLoader("knowledge_base.txt")  # Use a text file for context
+    documents = loader.load()
+    
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    docs = text_splitter.split_documents(documents)
+
+    vectorstore = FAISS.from_documents(docs, OpenAIEmbeddings())
+    retriever = vectorstore.as_retriever()
+    return retriever
+
 # Hardcoded question to generate a comment
 hardcoded_question = "Generate a very short comment for this LinkedIn post."
 
@@ -26,7 +42,7 @@ hardcoded_question = "Generate a very short comment for this LinkedIn post."
 def generate_comment(post_text):
     """Generate a LinkedIn comment using the Gemini API."""
     prompt = f"Generate a professional yet engaging comment for the following LinkedIn post:\n\n{post_text}"
-    response = generate_content(prompt)
+    response = genai.generate_content(prompt)
     return response.text if response else "Could not generate a comment."
 
 # Function to extract text from the PDF
