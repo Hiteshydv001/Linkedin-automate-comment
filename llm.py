@@ -11,15 +11,18 @@ from PyPDF2 import PdfReader
 import google.generativeai as genai
 from dotenv import load_dotenv
 import shutil
-from google.generativeai import generate_content
+
+
 
 
 # Load environment variables and set up Google API
 load_dotenv()
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+genai.configure(api_key="your_api_key")
+
 
 # Path to the PDF file
-pdf_path = r"C:\Users\Asus\OneDrive\Desktop\linkedin automation\linkedin_posts_report.pdf"
+pdf_path = r"D:/JWoC 2k25/linkedin-automate-comment/linkedin_comments_report.pdf"
+
 
 
 # Load RAG-based Knowledge Source
@@ -42,8 +45,9 @@ hardcoded_question = "Generate a very short comment for this LinkedIn post."
 def generate_comment(post_text):
     """Generate a LinkedIn comment using the Gemini API."""
     prompt = f"Generate a professional yet engaging comment for the following LinkedIn post:\n\n{post_text}"
-    response = genai.generate_content(prompt)
-    return response.text if response else "Could not generate a comment."
+    model = genai.GenerativeModel("gemini-pro")  # Use the correct model
+    response = model.generate_content(post_text)
+    return response.text  # Get generated text
 
 # Function to extract text from the PDF
 def get_pdf_text(pdf_path):

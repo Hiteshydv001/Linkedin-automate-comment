@@ -17,6 +17,12 @@ load_dotenv()
 EMAIL = os.getenv("EMAIL")
 PASSWORD = os.getenv("PASSWORD")
 
+# Load the environment variables explicitly from .env.local
+env_path = "D:/JWoC 2k25/linkedin-automate-comment/.env.local"
+load_dotenv(dotenv_path=env_path)
+
+
+
 
 def filter_bmp_characters(text):
     """Filter out non-BMP characters to prevent Selenium errors."""
