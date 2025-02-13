@@ -1,113 +1,78 @@
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
-from PyPDF2 import PdfReader
 import google.generativeai as genai
-from dotenv import load_dotenv
-import shutil
 
-# Load environment variables and set up Google API
-load_dotenv()
+# Load API key
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Path to the PDF file
-pdf_path = r"C:\Users\Asus\OneDrive\Desktop\linkedin automation\linkedin_posts_report.pdf"
+# FAISS Storage Path
+VECTOR_STORE_PATH = "faiss_index"
 
-# Hardcoded question to generate a comment
-hardcoded_question = "Generate a very short comment for this LinkedIn post."
+def initialize_vector_store():
+    """Ensures FAISS index is initialized with useful context data."""
+    if not os.path.exists(VECTOR_STORE_PATH):
+        print("📂 Vector store not found. Initializing with base data...")
+        sample_text = [
+            "LinkedIn is a professional network where users engage in discussions.",
+            "Effective LinkedIn comments are short, relevant, and engaging.",
+            "Networking on LinkedIn involves thoughtful engagement with posts.",
+            "Good comments on LinkedIn add value without being too generic."
+        ]
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+        text_chunks = text_splitter.split_text("\n".join(sample_text))
 
-# Function to extract text from the PDF
-def get_pdf_text(pdf_path):
-    text = ""
-    pdf_reader = PdfReader(pdf_path)
-    for page in pdf_reader.pages:
-        text += page.extract_text()
-    return text
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
+        vector_store.save_local(VECTOR_STORE_PATH)
 
-# Function to split the text into chunks for better processing
-def get_text_chunks(text):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
-    chunks = text_splitter.split_text(text)
-    return chunks
-
-# Function to save vector store (FAISS index)
-def get_vector_store(text_chunks):
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-    
-    # Remove the old FAISS index if it exists
-    if os.path.exists("faiss_index"):
-        shutil.rmtree("faiss_index")
-    
-    # Create a new FAISS index and save it
-    vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
-    vector_store.save_local("faiss_index")
-
-# Function to create a conversational chain for question answering
 def get_conversational_chain():
+    """Creates an AI model to generate relevant comments."""
     prompt_template = """
-    You are a comment generator trained to generate **very short**, relevant, and context-sensitive comments based on LinkedIn post content. Your response should be:
-    
+    You are a LinkedIn comment generator. Your response should be:
+
     - Directly related to the content of the post.
-    - Brief and concise (aim for no more than 1-2 sentences).
-    
-    If you are unable to generate an appropriate comment based on the provided context, reply with only a **thumbs-up emoji (👍)**. Do not provide any incorrect or off-topic responses.
-    
+    - Short and concise (1-2 sentences max).
+    - If unsure, respond with: "Nice post! 👍".
+
     Context:\n {context}\n
-    Question: \n{question}\n
+    Post Content: \n{question}\n
 
-    Answer:
+    Comment:
     """
-
     model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
-
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
-    chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
+    return load_qa_chain(model, chain_type="stuff", prompt=prompt)
 
-    return chain
-
-# Function to process user input and generate a response
-def user_input(user_question):
+def generate_comment(post_content):
+    """Generates a comment for LinkedIn post content."""
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
     
-    # Load the FAISS index, allowing dangerous deserialization (only for trusted files)
-    new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
-    docs = new_db.similarity_search(user_question)
+    # Load FAISS index
+    new_db = FAISS.load_local(VECTOR_STORE_PATH, embeddings, allow_dangerous_deserialization=True)
+    docs = new_db.similarity_search(post_content)
 
-    # Print the docs to verify the context
-    print("Retrieved documents for context: ", docs)
-    
+    print(f"🔍 Retrieved {len(docs)} relevant docs for context.")
+
+    # Generate response
     chain = get_conversational_chain()
+    
+    for attempt in range(3):  # Retry up to 3 times
+        print(f"⏳ Attempt {attempt + 1}: Generating comment...")
+        response = chain.invoke({"input_documents": docs, "question": post_content})
+        
+        comment_text = response["output_text"].strip()
+        print(f"📝 AI Generated Comment: {comment_text}")
 
-    response = chain({"input_documents": docs, "question": user_question}, return_only_outputs=True)
-    
-    return response["output_text"]
+        if comment_text and comment_text not in ["👍", "Great post!", "Nice!", ""]:
+            return comment_text  # Return valid comment
 
-# Main function to orchestrate the process
-def main():
-    print("Processing PDFs...")
-    
-    # Extract text from PDF and print for debugging
-    raw_text = get_pdf_text(pdf_path)
-    print("Extracted Text from PDF: ", raw_text)
-    
-    # Generate text chunks and print the number of chunks for debugging
-    text_chunks = get_text_chunks(raw_text)
-    print(f"Generated {len(text_chunks)} chunks of text.")
-    
-    # Generate the FAISS index (and update it)
-    get_vector_store(text_chunks)
-    
-    print("PDF Processing Complete. You can now ask questions.")
-    
-    # Hardcoded question to generate a comment
-    print("Generating a short comment for the LinkedIn post...")
-    comment = user_input(hardcoded_question)
-    
-    print("Generated Comment: ", comment)
+        print("⚠️ AI generated an empty or generic response. Retrying...")
 
-if __name__ == "__main__":
-    main()
+    return "Nice post! 👍"  # Default fallback comment
+
+# Initialize FAISS index if missing
+initialize_vector_store()
