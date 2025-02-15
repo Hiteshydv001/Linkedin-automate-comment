@@ -5,7 +5,7 @@ import time
 
 
 # ✅ Fetch API key from environment variable
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API-KEY")
 
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY is missing! Set it in Railway's environment variables.")
