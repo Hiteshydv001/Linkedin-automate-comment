@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle } from "lucide-react";
 
+const API_BASE_URL = "http://127.0.0.1:5000"; // ✅ Change this if needed
+
 export default function GenerateComments() {
   const [post, setPost] = useState("");
   const [comments, setComments] = useState([]);
@@ -24,11 +26,18 @@ export default function GenerateComments() {
     setComments([]);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/generate-comments", { post });
-      setComments(response.data.comments);
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Failed to generate comments. Please try again.");
+      const response = await axios.post(`${API_BASE_URL}/generate_comments`, { post });
+
+      if (response.data.error) {
+        setError(response.data.error); // ✅ Show API error messages
+      } else if (!response.data.comments || response.data.comments.length === 0) {
+        setError("No comments were generated. Try again with a different post.");
+      } else {
+        setComments(response.data.comments);
+      }
+    } catch (err) {
+      console.error("API Error:", err);
+      setError("Failed to generate comments. Please check if the backend is running.");
     } finally {
       setLoading(false);
     }
@@ -37,6 +46,7 @@ export default function GenerateComments() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto">
+        {/* Header Section */}
         <div className="flex items-center gap-4 mb-8">
           <MessageCircle className="h-8 w-8 text-primary" />
           <div>
@@ -45,6 +55,7 @@ export default function GenerateComments() {
           </div>
         </div>
 
+        {/* Input Section */}
         <Card>
           <CardHeader>
             <CardTitle>Input LinkedIn Post</CardTitle>
@@ -60,14 +71,17 @@ export default function GenerateComments() {
           </CardContent>
         </Card>
 
+        {/* Generate Button */}
         <div className="flex justify-center mt-6">
           <Button size="lg" onClick={handleGenerateComments} disabled={loading} className="w-full">
             {loading ? "Generating..." : "Generate Comments"}
           </Button>
         </div>
 
+        {/* Error Message */}
         {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
 
+        {/* Generated Comments Section */}
         {comments.length > 0 && (
           <Card className="mt-6">
             <CardHeader>

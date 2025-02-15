@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { Brain } from "lucide-react";
 
+const API_BASE_URL = "http://127.0.0.1:5000"; // ✅ Centralized API URL
+
 export default function Summarize() {
   const [text, setText] = useState("");
   const [summary, setSummary] = useState("");
@@ -26,12 +28,17 @@ export default function Summarize() {
     setValidation("");
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/summarize", { text });
-      setSummary(response.data.summary);
-      setValidation(response.data.validation);
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Failed to summarize. Please try again.");
+      const response = await axios.post(`${API_BASE_URL}/summarize`, { text });
+
+      if (response.data.error) {
+        setError(response.data.error); // ✅ Show backend error message
+      } else {
+        setSummary(response.data.summary);
+        setValidation(response.data.validation || "Validation not provided."); // ✅ Handle missing validation
+      }
+    } catch (err) {
+      console.error("API Error:", err);
+      setError("Failed to summarize. Please check if the backend is running.");
     } finally {
       setLoading(false);
     }

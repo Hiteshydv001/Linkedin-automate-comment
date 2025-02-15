@@ -26,7 +26,7 @@ export default function SentimentAnalysis() {
     setConfidence("");
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/analyze-sentiment", { text });
+      const response = await axios.post("http://127.0.0.1:5000/analyze_sentiment", { text });
       setSentiment(response.data.sentiment);
       setConfidence(response.data.confidence);
     } catch (error) {
