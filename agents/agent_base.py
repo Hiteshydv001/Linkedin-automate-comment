@@ -14,7 +14,6 @@ if not GEMINI_API_KEY:
 genai.configure(api_key=GEMINI_API_KEY)
 
 
-genai.configure(api_key=GEMINI_API_KEY)
 
 class AgentBase(ABC):
     def __init__(self, name, max_retries=3, verbose=True):
