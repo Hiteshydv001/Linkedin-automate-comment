@@ -1,21 +1,26 @@
 import os
 import time
 import random
-import csv
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 import undetected_chromedriver as uc
+<<<<<<< HEAD
 from fpdf import FPDF  # Import FPDF for PDF generation
 from llm import generate_comment  # Import updated LLM function
+=======
+from llm import generate_comment  # Import AI comment generator
+>>>>>>> main
 
 # Load environment variables
 load_dotenv()
 EMAIL = os.getenv("EMAIL")
 PASSWORD = os.getenv("PASSWORD")
+<<<<<<< HEAD
 
 # Load the environment variables explicitly from .env.local
 env_path = "D:/JWoC 2k25/linkedin-automate-comment/.env.local"
@@ -101,66 +106,82 @@ def scrape_linkedin_posts():
 
 
 def automate_linkedin_comments():
+=======
+
+def automate_linkedin_comments(email, password):
+>>>>>>> main
     options = Options()
     options.add_argument("--start-maximized")
     driver = uc.Chrome(options=options)
 
-    # Prepare a list to store results for the PDF report
-    results = []
-
     try:
-        # Step 1: Login to LinkedIn
+        # **🔹 Login**
         driver.get("https://www.linkedin.com/login")
         time.sleep(2)
+<<<<<<< HEAD
 
         driver.find_element(By.ID, "username").send_keys(EMAIL)
         driver.find_element(By.ID, "password").send_keys(PASSWORD)
+=======
+        driver.find_element(By.ID, "username").send_keys(email)
+        driver.find_element(By.ID, "password").send_keys(password)
+>>>>>>> main
         driver.find_element(By.XPATH, '//button[@type="submit"]').click()
         time.sleep(5)
 
-        # Step 2: Navigate to LinkedIn feed
+        # **🔹 Navigate to feed**
         driver.get("https://www.linkedin.com/feed/")
         time.sleep(5)
 
-        # Scroll to load more posts
-        for _ in range(3):
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(3)
-
-        # Step 3: Find posts
-        posts = driver.find_elements(By.CLASS_NAME, "feed-shared-update-v2")
-        if not posts:
-            print("No posts found.")
-            return
-
-        for idx, post in enumerate(posts[:5]):  # Limit to 5 posts
+        for i in range(5):  # Process 5 posts
             try:
+<<<<<<< HEAD
                 # Get post content for reference
                 post_content = post.text[:200]  # Extract first 200 characters for the report
 
                 # Generate AI-based comment using RAG
                 generated_comment = generate_comment(post_content)
+=======
+                # **🔹 Find all posts**
+                posts = driver.find_elements(By.CLASS_NAME, "feed-shared-update-v2")
+                if len(posts) <= i:
+                    print("⚠️ No more posts available.")
+                    break
+                
+                post = posts[i]  # Take the i-th post
+                
+                # **🔹 Scroll post into view**
+                driver.execute_script("arguments[0].scrollIntoView();", post)
+                time.sleep(2)
+>>>>>>> main
 
-                # Click "See more" if it exists
-                try:
-                    see_more_button = post.find_element(By.XPATH, './/button[contains(text(), "See more")]')
-                    driver.execute_script("arguments[0].click();", see_more_button)
-                    time.sleep(2)
-                except:
-                    pass  # No "See more" button
+                # **🔹 Extract Post Content**
+                post_content = post.text[:300]  # First 300 characters
+                print(f"\n📌 Processing Post {i+1}:\n{post_content[:100]}...")  # Show a preview
 
-                # Locate and click the "Comment" button
+                # **🔹 Generate AI comment**
+                print("⏳ Sending post content to LLM API...")
+                comment_text = generate_comment(post_content)
+                time.sleep(random.uniform(5, 10))  # Simulate LLM processing time
+
+                if not comment_text or comment_text.strip() in ["👍", "Nice!", "Great post!"]:
+                    print("⚠️ Skipping post (no meaningful comment generated).")
+                    continue
+
+                print(f"✅ AI Generated Comment: {comment_text}")
+
+                # **🔹 Open Comment Section**
                 try:
                     comment_button = post.find_element(By.XPATH, './/button[contains(@aria-label, "Comment")]')
                     driver.execute_script("arguments[0].click();", comment_button)
-                    time.sleep(2)
+                    time.sleep(3)
                 except:
-                    print(f"Post {idx + 1}: No comment button found. Skipping...")
-                    results.append({"Post Index": idx + 1, "Post Content": post_content, "Comment Status": "No Comment Button"})
+                    print("⚠️ No comment button found. Skipping...")
                     continue
 
-                # Find the comment text area
+                # **🔹 Enter Comment**
                 comment_box = post.find_element(By.XPATH, './/div[contains(@role, "textbox")]')
+<<<<<<< HEAD
 
                 # Filter BMP characters and inject comment using JavaScript
                 filtered_comment_text = filter_bmp_characters(generated_comment)
@@ -168,33 +189,42 @@ def automate_linkedin_comments():
                 driver.execute_script(
                     "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", comment_box
                 )
+=======
+                driver.execute_script("arguments[0].innerText = arguments[1];", comment_box, comment_text)
+                driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", comment_box)
+>>>>>>> main
                 time.sleep(2)
 
-                # Find and click the "Post comment" button
+                # **🔹 Click Post Button**
                 try:
                     post_button = WebDriverWait(post, 10).until(
-                        EC.element_to_be_clickable((By.XPATH, './/button[contains(@class, "comments-comment-box__submit-button--cr") and contains(@class, "artdeco-button--primary")]'))
+                        EC.element_to_be_clickable((By.XPATH, './/button[contains(@class, "comments-comment-box__submit-button--cr")]'))
                     )
-                    driver.execute_script("arguments[0].scrollIntoView({ block: 'center', inline: 'nearest' });", post_button)
                     driver.execute_script("arguments[0].click();", post_button)
-                    time.sleep(random.uniform(2, 4))  # Wait before moving to the next post
-                    print(f"Commented on Post {idx + 1}")
-                    results.append({"Post Index": idx + 1, "Post Content": post_content, "Comment Status": "Commented"})
-                except Exception as e:
-                    print(f"Post {idx + 1}: Unable to click the 'Post comment' button. {e}")
-                    results.append({"Post Index": idx + 1, "Post Content": post_content, "Comment Status": "Failed to Comment"})
-                    continue
+                    time.sleep(random.uniform(2, 4))
+                    print("✅ Comment Posted Successfully!")
+                except:
+                    print("⚠️ Failed to post comment.")
+
+                # **🔹 Scroll to Next Post Properly**
+                print("🔽 Scrolling to next post...")
+                ActionChains(driver).move_to_element(posts[i]).perform()  # Move to next post
+                driver.execute_script("window.scrollBy(0, 700);")  # Scroll smoothly down
+                time.sleep(3)
 
             except Exception as e:
-                print(f"Error processing Post {idx + 1}: {e}")
-                continue
+                print(f"❌ Error processing post: {e}")
 
     finally:
         driver.quit()
-        print(f"Automation complete. Generating PDF report.")
-        generate_pdf_report(results)
+        print("✅ Automation Completed.")
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     print("Starting LinkedIn automation...")
     automate_linkedin_comments()
+=======
+    print("🚀 Starting LinkedIn automation...")
+    automate_linkedin_comments(EMAIL, PASSWORD)
+>>>>>>> main
