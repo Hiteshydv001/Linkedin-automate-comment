@@ -1,21 +1,22 @@
 import google.generativeai as genai
 from abc import ABC, abstractmethod
-import streamlit as st
+import os
 import time
 
-# Configure Gemini API using Streamlit secrets
-GEMINI_API_KEY = st.secrets.get("GEMINI_API_KEY")
+# Configure Gemini API using environment variables
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-else:
-    raise ValueError("GEMINI_API_KEY is missing! Make sure to set it in Streamlit secrets.")
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY is missing! Set it as an environment variable.")
+
+genai.configure(api_key=GEMINI_API_KEY)
 
 class AgentBase(ABC):
     def __init__(self, name, max_retries=3, verbose=True):
         self.name = name
         self.max_retries = max_retries
         self.verbose = verbose
+        self.cache = {}  # In-memory cache
 
     @abstractmethod
     def execute(self, *args, **kwargs):
@@ -24,14 +25,14 @@ class AgentBase(ABC):
     def call_gemini(self, prompt, model="gemini-pro"):
         """Calls Gemini AI with retries, backoff, and caching to avoid rate limits."""
         if not GEMINI_API_KEY:
-            raise ValueError(f"[{self.name}] GEMINI_API_KEY is missing. Check Streamlit secrets.")
+            raise ValueError(f"[{self.name}] GEMINI_API_KEY is missing. Check environment variables.")
 
         # Check cache (avoid redundant API calls)
-        cache_key = f"gemini_cache_{hash(prompt)}"
-        if cache_key in st.session_state:
+        cache_key = hash(prompt)
+        if cache_key in self.cache:
             if self.verbose:
                 print(f"[{self.name}] Returning cached response.")
-            return st.session_state[cache_key]
+            return self.cache[cache_key]
 
         retries = 0
         while retries < self.max_retries:
@@ -49,7 +50,7 @@ class AgentBase(ABC):
                     reply = "No response generated."
 
                 # Cache response
-                st.session_state[cache_key] = reply
+                self.cache[cache_key] = reply
 
                 if self.verbose:
                     print(f"[{self.name}] Received response: {reply}")
