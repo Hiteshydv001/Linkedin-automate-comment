@@ -3,11 +3,16 @@ from abc import ABC, abstractmethod
 import os
 import time
 
-# Configure Gemini API using environment variables
+
+# ✅ Fetch API key from environment variable
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY is missing! Set it as an environment variable.")
+    raise ValueError("GEMINI_API_KEY is missing! Set it in Railway's environment variables.")
+
+# ✅ Configure Gemini AI
+genai.configure(api_key=GEMINI_API_KEY)
+
 
 genai.configure(api_key=GEMINI_API_KEY)
 
