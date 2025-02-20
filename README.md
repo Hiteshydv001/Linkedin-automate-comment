@@ -61,13 +61,82 @@ Ideal for professionals who want to stay active on LinkedIn with **minimal effor
 
 ## Directory Structure 📁
 ```plaintext
-linkedin-automate-comment/
-├── README.md                # Project documentation
-├── web_scrapper.py          # Script to scrape LinkedIn posts
-├── analyze.py               # Sentiment analysis script
-├── llm.py                   # AI-powered comment generation
-├── test.py                  # Automates LinkedIn commenting
-├── linkedin_posts.csv       # Sample CSV for post data
+Directory structure:
+└── hiteshydv001-linkedin-automate-comment/
+    ├── README.md
+    ├── anlyze.py
+    ├── contribution.md
+    ├── linkedin_posts.csv
+    ├── llm.py
+    ├── main.py
+    ├── requirements.txt
+    ├── service.json
+    ├── web_scrapper.py
+    ├── .env.local
+    ├── JWoC/
+    │   └── Readme.md
+    ├── agents/
+    │   ├── __init__.py
+    │   ├── agent_base.py
+    │   ├── generate_comment_agent.py
+    │   ├── refiner_agent.py
+    │   ├── sanitize_data_tool.py
+    │   ├── sanitize_data_validator_agent.py
+    │   ├── sentiment_analysis_agent.py
+    │   ├── summarize_tool.py
+    │   ├── summarize_validator_agent.py
+    │   ├── validator_agent.py
+    │   ├── write_post_tool.py
+    │   └── write_post_validator_agent.py
+    ├── frontend/
+    │   ├── README.md
+    │   ├── components.json
+    │   ├── eslint.config.mjs
+    │   ├── next.config.ts
+    │   ├── package-lock.json
+    │   ├── package.json
+    │   ├── postcss.config.mjs
+    │   ├── tailwind.config.ts
+    │   ├── tsconfig.json
+    │   ├── .gitignore
+    │   ├── public/
+    │   └── src/
+    │       ├── app/
+    │       │   ├── globals.css
+    │       │   ├── layout.tsx
+    │       │   ├── page.tsx
+    │       │   ├── generate_comments/
+    │       │   │   └── page.tsx
+    │       │   ├── sentiment_analysis/
+    │       │   │   └── page.tsx
+    │       │   ├── summarize/
+    │       │   │   └── page.tsx
+    │       │   └── write_post/
+    │       │       └── page.tsx
+    │       ├── components/
+    │       │   ├── main-nav.tsx
+    │       │   ├── theme-provider.tsx
+    │       │   └── ui/
+    │       │       ├── button.tsx
+    │       │       ├── card.tsx
+    │       │       ├── dialog.tsx
+    │       │       ├── dropdown-menu.tsx
+    │       │       ├── form.tsx
+    │       │       ├── input.tsx
+    │       │       ├── label.tsx
+    │       │       ├── select.tsx
+    │       │       ├── tabs.tsx
+    │       │       ├── textarea.tsx
+    │       │       ├── toast.tsx
+    │       │       └── toaster.tsx
+    │       ├── hooks/
+    │       │   └── use-toast.ts
+    │       └── lib/
+    │           └── utils.ts
+    └── .github/
+        ├── dependabot.yml
+        └── workflows/
+            └── codeql.yml
 ```
 
 ---
