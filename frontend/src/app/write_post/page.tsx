@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PenTool } from "lucide-react"
 
-const API_BASE_URL = "http://127.0.0.1:5000"; // ✅ Centralized API URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000"; // ✅ Dynamic API URL
 
 export default function GeneratePost() {
   const [topic, setTopic] = useState("")

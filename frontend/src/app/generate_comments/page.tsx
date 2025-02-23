@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle, Loader2 } from "lucide-react";
 
-const API_BASE_URL = "http://127.0.0.1:5000"; // Ensure backend is running on this
+// ✅ Use dynamic API URL for both local & production
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
 
 export default function GenerateComments() {
   const [post, setPost] = useState("");
@@ -27,7 +28,7 @@ export default function GenerateComments() {
 
     try {
       const response = await axios.post(`${API_BASE_URL}/generate_comments`, { 
-        post_content: post  // ✅ Fix: Send "post_content" instead of "post"
+        post_content: post 
       });
 
       if (response.data?.error) {
@@ -39,7 +40,7 @@ export default function GenerateComments() {
       }
     } catch (err) {
       console.error("API Error:", err);
-      setError("Failed to generate comments. Ensure the backend is running at 127.0.0.1:5000.");
+      setError("Failed to generate comments. Ensure the backend is running.");
     } finally {
       setLoading(false);
     }

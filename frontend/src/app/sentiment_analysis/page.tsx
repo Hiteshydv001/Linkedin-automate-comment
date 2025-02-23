@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { Brain } from "lucide-react";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
+
 export default function SentimentAnalysis() {
   const [text, setText] = useState("");
   const [sentiment, setSentiment] = useState("");
@@ -26,7 +28,7 @@ export default function SentimentAnalysis() {
     setConfidence("");
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/sentiment_analysis", { text });
+      const response = await axios.post(`${API_BASE_URL}/sentiment_analysis`, { text });
       setSentiment(response.data.sentiment);
       setConfidence(response.data.confidence);
     } catch (error) {

@@ -12,10 +12,10 @@ load_dotenv()
 
 app = FastAPI()
 
-# ✅ Enable CORS for all routes
+# ✅ Enable CORS (Modify `allow_origins` for security)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Change this to specific frontend URL if needed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -116,10 +116,10 @@ def sentiment_analysis(request: SentimentAnalysisRequest):
         sentiment = agent_manager.get_agent("sentiment_analysis").execute(request.text)
         return {"sentiment": sentiment}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)}
 
-# ✅ Start FastAPI with Uvicorn (Custom Port)
+# ✅ Start FastAPI with Uvicorn for Railway Deployment
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 5000))
-    print(f"🚀 Server starting on http://127.0.0.1:{port} ...")
-    uvicorn.run(app, host="127.0.0.1", port=port)
+    port = int(os.getenv("PORT", 8000))  # Railway provides dynamic PORT
+    print(f"🚀 Server starting on http://0.0.0.0:{port} ...")
+    uvicorn.run(app, host="0.0.0.0", port=port)

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { Brain } from "lucide-react";
 
-const API_BASE_URL = "http://127.0.0.1:5000"; // ✅ Centralized API URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:5000";
 
 export default function Summarize() {
   const [text, setText] = useState("");
@@ -31,10 +31,10 @@ export default function Summarize() {
       const response = await axios.post(`${API_BASE_URL}/summarize`, { text });
 
       if (response.data.error) {
-        setError(response.data.error); // ✅ Show backend error message
+        setError(response.data.error);
       } else {
         setSummary(response.data.summary);
-        setValidation(response.data.validation || "Validation not provided."); // ✅ Handle missing validation
+        setValidation(response.data.validation || "Validation not provided.");
       }
     } catch (err) {
       console.error("API Error:", err);
@@ -47,7 +47,6 @@ export default function Summarize() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
         <div className="flex items-center gap-4 mb-8">
           <Brain className="h-8 w-8 text-primary" />
           <div>
@@ -56,7 +55,6 @@ export default function Summarize() {
           </div>
         </div>
 
-        {/* Text Input Section */}
         <div className="grid gap-6">
           <Card>
             <CardHeader>
@@ -73,7 +71,6 @@ export default function Summarize() {
             </CardContent>
           </Card>
 
-          {/* Summarize Button */}
           <div className="flex justify-center">
             <Button
               size="lg"
@@ -85,10 +82,8 @@ export default function Summarize() {
             </Button>
           </div>
 
-          {/* Error Display */}
           {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
 
-          {/* Summary Section */}
           {summary && (
             <Card>
               <CardHeader>
@@ -104,7 +99,6 @@ export default function Summarize() {
             </Card>
           )}
 
-          {/* Validation Section */}
           {validation && (
             <Card>
               <CardHeader>
