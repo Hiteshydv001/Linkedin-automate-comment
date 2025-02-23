@@ -3,6 +3,11 @@ from abc import ABC, abstractmethod
 import os
 import time
 
+from dotenv import load_dotenv
+
+# Load environment variables from .env.local file
+load_dotenv(dotenv_path=".env.local")
+
 
 # ✅ Fetch API key from environment variable
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")

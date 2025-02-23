@@ -4,7 +4,9 @@ from pydantic import BaseModel
 import uvicorn
 import os
 from agents import AgentManager
+from dotenv import load_dotenv
 
+load_dotenv(dotenv_path=".env.local")
 app = FastAPI()
 
 # ✅ Enable CORS for all routes

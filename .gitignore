@@ -1,8 +1,10 @@
 # Virtual environment
 venv/
+.venv/
 # Environment variables
 .env
 # Compiled Python files
 __pycache__/
 faiss_index/
 linkedin_posts.csv/
+.env.local
