@@ -1,70 +1,176 @@
+
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { MoonIcon, SunIcon } from "lucide-react";
+import { MoonIcon, SunIcon, Menu, X } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export function MainNav() {
   const pathname = usePathname();
   const { setTheme, theme } = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const routes = [
-    {
-      href: "/",
-      label: "Dashboard",
-      active: pathname === "/",
-    },
-    {
-      href: "/summarize",
-      label: "Summarize",
-      active: pathname === "/summarize",
-    },
-    {
-      href: "/sentiment_analysis",
-      label: "Sentiment Analysis",
-      active: pathname === "/sentiment_analysis",
-    },
-    {
-      href: "/write_post",
-      label: "Write Post",
-      active: pathname === "/write_post",
-    },
-    {
-      href: "/generate_comments",
-      label: "Generate Comments",
-      active: pathname === "/generate_comments",
-    },
+    { href: "/", label: "Dashboard" },
+    { href: "/summarize", label: "Summarize" },
+    { href: "/sentiment_analysis", label: "Sentiment Analysis" },
+    { href: "/write_post", label: "Write Post" },
+    { href: "/generate_comments", label: "Generate Comments" },
   ];
 
+  if (!mounted) {
+    return null;
+  }
+
+  const isLightTheme = theme === "light";
+
   return (
-    <div className="border-b">
-      <div className="flex h-16 items-center px-4 max-w-7xl mx-auto">
-        <div className="flex items-center space-x-6 flex-1">
-          {routes.map((route) => (
-            <Link
-              key={route.href}
-              href={route.href}
+    <div className="relative">
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-30 z-10"
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
+
+      <div
+        className={cn(
+          "m-4 mx-20 p-0 rounded-[20px] shadow-lg transition-colors",
+          isLightTheme ? "bg-white text-black" : "bg-zinc-900 text-white"
+        )}
+      >
+        <div className="flex h-16 items-center justify-between px-4 max-w-7xl mx-auto relative">
+          <div className="flex items-center">
+            <p
               className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                route.active ? "text-black dark:text-white" : "text-muted-foreground"
+                "p-1 transition-colors font-bold",
+                isLightTheme ? "text-black" : "text-white"
               )}
             >
-              {route.label}
-            </Link>
-          ))}
+              Linkedin AI
+            </p>
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "lg:hidden z-20 transition-colors" // Hamburger button
+            )}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </Button>
+
+          {isOpen && (
+            <div
+              className={cn(
+                "fixed top-0 left-0 h-full w-64 p-4 transition-transform transform z-20 flex flex-col",
+                isLightTheme ? "bg-white text-black" : "bg-zinc-900 text-white",
+                isOpen ? "translate-x-0" : "-translate-x-full"
+              )}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center">
+                  <p
+                    className={cn(
+                      "p-1 transition-colors font-bold",
+                      isLightTheme ? "text-black" : "text-white"
+                    )}
+                  >
+                    LinkedIn AI
+                  </p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "transition-colors" // Mobile close button
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <X className="w-6 h-6" />
+                </Button>
+              </div>
+
+              {routes.map((route) => (
+                <Link href={route.href} key={route.href} className="relative">
+                  <span
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "block px-4 py-2 text-sm font-medium transition-colors",
+                      pathname === route.href
+                        ? "text-orange-500" // Active link
+                        : isLightTheme
+                        ? "text-gray-600 hover:text-orange-500" // Link
+                        : "text-gray-400 hover:text-orange-500"  // Link
+                    )}
+                  >
+                    {route.label}
+                  </span>
+                </Link>
+              ))}
+
+              <div className="mt-auto flex justify-center">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setTheme(isLightTheme ? "dark" : "light")}
+                  className={cn(
+                    "flex justify-center items-center w-10 h-10 mb-4 mx-auto transition-colors" // Theme toggle, no hover
+                  )}
+                >
+                  <SunIcon className="h-5 w-5 transition-all dark:hidden" />
+                  <MoonIcon className="h-5 w-5 transition-all hidden dark:block" />
+                  <span className="sr-only">Toggle theme</span>
+                </Button>
+              </div>
+            </div>
+          )}
+
+          <div className="hidden lg:flex lg:space-x-6">
+            {routes.map((route) => (
+              <Link href={route.href} key={route.href} className="relative">
+                <span
+                  className={cn(
+                    "text-sm font-medium transition-colors",
+                    pathname === route.href
+                      ? "text-orange-500" // Active link
+                      : isLightTheme
+                      ? "text-gray-600 hover:text-orange-500" // Link
+                      : "text-gray-400 hover:text-orange-500"  // Link
+                  )}
+                >
+                  {route.label}
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="hidden lg:block">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(isLightTheme ? "dark" : "light")}
+              className={cn(
+                "transition-colors" // Theme toggle
+              )}
+            >
+              <SunIcon className="h-5 w-5 transition-all dark:hidden" />
+              <MoonIcon className="h-5 w-5 transition-all hidden dark:block" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          </div>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        >
-          <SunIcon className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
       </div>
     </div>
   );
