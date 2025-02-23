@@ -2,18 +2,19 @@ import google.generativeai as genai
 from abc import ABC, abstractmethod
 import os
 import time
+from dotenv import load_dotenv  # ✅ Import dotenv
 
+# ✅ Load environment variables from .env file
+load_dotenv()
 
 # ✅ Fetch API key from environment variable
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY is missing! Set it in Railway's environment variables.")
+    raise ValueError("GEMINI_API_KEY is missing. Ensure you have a .env file with the API key.")
 
 # ✅ Configure Gemini AI
 genai.configure(api_key=GEMINI_API_KEY)
-
-
 
 class AgentBase(ABC):
     def __init__(self, name, max_retries=3, verbose=True):

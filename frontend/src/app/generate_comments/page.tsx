@@ -5,13 +5,13 @@ import axios from "axios";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Loader2 } from "lucide-react";
 
-const API_BASE_URL = "http://127.0.0.1:5000"; // ✅ Change this if needed
+const API_BASE_URL = "http://127.0.0.1:5000"; // Ensure backend is running on this
 
 export default function GenerateComments() {
   const [post, setPost] = useState("");
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -26,18 +26,20 @@ export default function GenerateComments() {
     setComments([]);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/generate_comments`, { post });
+      const response = await axios.post(`${API_BASE_URL}/generate_comments`, { 
+        post_content: post  // ✅ Fix: Send "post_content" instead of "post"
+      });
 
-      if (response.data.error) {
-        setError(response.data.error); // ✅ Show API error messages
-      } else if (!response.data.comments || response.data.comments.length === 0) {
+      if (response.data?.error) {
+        setError(response.data.error);
+      } else if (!response.data?.comments?.length) {
         setError("No comments were generated. Try again with a different post.");
       } else {
         setComments(response.data.comments);
       }
     } catch (err) {
       console.error("API Error:", err);
-      setError("Failed to generate comments. Please check if the backend is running.");
+      setError("Failed to generate comments. Ensure the backend is running at 127.0.0.1:5000.");
     } finally {
       setLoading(false);
     }
@@ -74,7 +76,7 @@ export default function GenerateComments() {
         {/* Generate Button */}
         <div className="flex justify-center mt-6">
           <Button size="lg" onClick={handleGenerateComments} disabled={loading} className="w-full">
-            {loading ? "Generating..." : "Generate Comments"}
+            {loading ? <Loader2 className="animate-spin" /> : "Generate Comments"}
           </Button>
         </div>
 

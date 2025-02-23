@@ -3,7 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 import os
+from dotenv import load_dotenv
 from agents import AgentManager
+from typing import List
+
+# ✅ Load environment variables from .env
+load_dotenv()
 
 app = FastAPI()
 
@@ -16,6 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ✅ Initialize the agent manager
 agent_manager = AgentManager()
 
 # ✅ Request Models
@@ -92,13 +98,17 @@ def validate_post(request: ValidatePostRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/generate_comment")
-def generate_comment(request: GenerateCommentRequest):
+@app.post("/generate_comments")  # ✅ Fixed endpoint name
+def generate_comments(request: GenerateCommentRequest):
     try:
-        comment = agent_manager.get_agent("generate_comment").execute(request.post_content)
-        return {"comment": comment}
+        comments = agent_manager.get_agent("generate_comment").execute(request.post_content)
+        
+        if not isinstance(comments, list):  # ✅ Ensure response is a list
+            comments = [comments]  # Convert single string to a list
+        
+        return {"comments": comments}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Error generating comments: {str(e)}")
 
 @app.post("/sentiment_analysis")
 def sentiment_analysis(request: SentimentAnalysisRequest):
@@ -108,7 +118,8 @@ def sentiment_analysis(request: SentimentAnalysisRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ✅ Start FastAPI with Uvicorn (Railway Deployment)
+# ✅ Start FastAPI with Uvicorn (Custom Port)
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))  # Use Railway's assigned port
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    port = int(os.getenv("PORT", 5000))
+    print(f"🚀 Server starting on http://127.0.0.1:{port} ...")
+    uvicorn.run(app, host="127.0.0.1", port=port)

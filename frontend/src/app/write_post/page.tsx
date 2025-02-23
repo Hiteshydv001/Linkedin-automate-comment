@@ -31,7 +31,7 @@ export default function GeneratePost() {
     setPost("");
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/generate_post`, {
+      const response = await axios.post(`${API_BASE_URL}/write_post`, {
         topic: trimmedTopic,
         keywords: trimmedKeywords
       });
