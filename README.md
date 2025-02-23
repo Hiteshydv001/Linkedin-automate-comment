@@ -100,6 +100,7 @@ Directory structure:
     │   ├── tsconfig.json
     │   ├── .gitignore
     │   ├── public/
+    │   │   └── linkedin-automation-icon.avif
     │   └── src/
     │       ├── app/
     │       │   ├── globals.css
@@ -137,6 +138,7 @@ Directory structure:
         ├── dependabot.yml
         └── workflows/
             └── codeql.yml
+
 ```
 
 ---
