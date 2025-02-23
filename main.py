@@ -116,7 +116,7 @@ def sentiment_analysis(request: SentimentAnalysisRequest):
         sentiment = agent_manager.get_agent("sentiment_analysis").execute(request.text)
         return {"sentiment": sentiment}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)}
+        raise HTTPException(status_code=500, detail=str(e)
 
 # ✅ Start FastAPI with Uvicorn for Railway Deployment
 if __name__ == "__main__":
