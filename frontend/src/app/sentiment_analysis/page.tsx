@@ -81,11 +81,11 @@ export default function SentimentAnalysis() {
             </CardHeader>
             <CardContent>
               <div className="p-4 rounded-lg bg-muted">
-                <h2 className="font-semibold text-gray-800">Sentiment:</h2>
-                <p className="text-gray-700">{sentiment}</p>
+                <h2 className="font-semibold text-gray-500">Sentiment:</h2>
+                <p className="text-gray-400">{sentiment}</p>
 
-                <h2 className="font-semibold text-gray-800 mt-3">Confidence Score:</h2>
-                <p className="text-gray-700">{confidence}</p>
+                <h2 className="font-semibold text-gray-500 mt-3">Confidence Score:</h2>
+                <p className="text-gray-400">{confidence}</p>
               </div>
             </CardContent>
           </Card>

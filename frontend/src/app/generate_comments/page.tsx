@@ -94,7 +94,7 @@ export default function GenerateComments() {
             <CardContent>
               <div className="p-4 rounded-lg bg-muted space-y-2">
                 {comments.map((comment, index) => (
-                  <p key={index} className="text-gray-700">- {comment}</p>
+                  <p key={index} className="text-gray-400">- {comment}</p>
                 ))}
               </div>
             </CardContent>
