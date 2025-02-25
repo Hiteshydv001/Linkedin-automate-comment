@@ -92,8 +92,8 @@ export default function Summarize() {
               </CardHeader>
               <CardContent>
                 <div className="p-4 rounded-lg bg-muted">
-                  <h2 className="font-semibold text-gray-800">Summary:</h2>
-                  <p className="text-gray-700">{summary}</p>
+                  <h2 className="font-semibold text-gray-500">Summary:</h2>
+                  <p className="text-gray-400">{summary}</p>
                 </div>
               </CardContent>
             </Card>
@@ -107,8 +107,8 @@ export default function Summarize() {
               </CardHeader>
               <CardContent>
                 <div className="p-4 rounded-lg bg-muted">
-                  <h2 className="font-semibold text-gray-800">Validation:</h2>
-                  <p className="text-gray-700">{validation}</p>
+                  <h2 className="font-semibold text-gray-500">Validation:</h2>
+                  <p className="text-gray-400">{validation}</p>
                 </div>
               </CardContent>
             </Card>

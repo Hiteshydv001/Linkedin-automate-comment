@@ -106,8 +106,8 @@ export default function GeneratePost() {
             </CardHeader>
             <CardContent>
               <div className="p-4 rounded-lg bg-muted">
-                <h2 className="font-semibold text-gray-800">Generated Post:</h2>
-                <p className="text-gray-700">{post}</p>
+                <h2 className="font-semibold text-gray-500">Generated Post:</h2>
+                <p className="text-gray-400">{post}</p>
               </div>
             </CardContent>
           </Card>
