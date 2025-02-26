@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 from agents import AgentManager
 from typing import List
+from rag_chatbot.query_handler import answer_query 
 
 # ✅ Load environment variables from .env
 load_dotenv()
@@ -47,6 +48,9 @@ class GenerateCommentRequest(BaseModel):
 
 class SentimentAnalysisRequest(BaseModel):
     text: str
+
+class ChatQueryRequest(BaseModel):
+    query: str  # ✅ Input query for the chatbot
 
 # ✅ Health Check Route
 @app.get("/")
@@ -117,6 +121,16 @@ def sentiment_analysis(request: SentimentAnalysisRequest):
         return {"sentiment": sentiment}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))  # ✅ Fixed missing closing parenthesis
+    
+@app.post("/rag_chat")
+def rag_chat(request: ChatQueryRequest):
+    """Handles queries related to the project using RAG."""
+    try:
+        response = answer_query(request.query)  # ✅ Get chatbot response
+        return {"response": response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 # ✅ Start FastAPI with Uvicorn for Railway Deployment
 if __name__ == "__main__":
