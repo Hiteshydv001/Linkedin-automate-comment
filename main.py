@@ -3,15 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
-from .rag_chatbot.query_handler import answer_query
 import uvicorn
 from typing import List
 
-# Optional imports for UI serving (uncomment if needed)
-# from fastapi.responses import HTMLResponse
-# from starlette.requests import Request
-# from starlette.templating import Jinja2Templates
-# templates = Jinja2Templates(directory="templates")
+from rag.query_handler import answer_query
+
 
 # Assuming agents.py exists in your project
 from agents import AgentManager
@@ -24,7 +20,7 @@ app = FastAPI()
 # Enable CORS (adjust allow_origins for production security)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change to specific frontend URL (e.g., "http://localhost:3000") in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -58,7 +54,7 @@ class SentimentAnalysisRequest(BaseModel):
     text: str
 
 class ChatQueryRequest(BaseModel):
-    query: str  # Input query for the RAG chatbot
+    query: str
 
 # Health Check Route
 @app.get("/")
@@ -115,7 +111,7 @@ def generate_comments(request: GenerateCommentRequest):
     try:
         comments = agent_manager.get_agent("generate_comment").execute(request.post_content)
         if not isinstance(comments, list):
-            comments = [comments]  # Convert single string to list
+            comments = [comments]
         return {"comments": comments}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating comments: {str(e)}")
@@ -131,19 +127,12 @@ def sentiment_analysis(request: SentimentAnalysisRequest):
 # RAG Chatbot Route
 @app.post("/rag_chat")
 def rag_chat(request: ChatQueryRequest):
-    """Handles queries related to the project using RAG."""
     try:
         response = answer_query(request.query)
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# Optional UI Serving Route (uncomment if you have templates/index.html)
-# @app.get("/", response_class=HTMLResponse)
-# async def serve_ui(request: Request):
-#     return templates.TemplateResponse("index.html", {"request": request})
-
-# Start FastAPI
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     print(f"🚀 Server starting on http://0.0.0.0:{port} ...")
