@@ -76,3 +76,11 @@ def generate_comment(post_content):
 
 # Initialize FAISS index if missing
 initialize_vector_store()
+
+
+def get_llm_response(prompt):
+    """Generates a response using Gemini API"""
+    model = genai.GenerativeModel("gemini-pro")
+    response = model.generate_content(prompt)
+    
+    return response.text
