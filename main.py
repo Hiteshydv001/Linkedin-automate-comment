@@ -145,7 +145,7 @@ def rag_chat(request: ChatQueryRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ✅ Start FastAPI with Uvicorn for Railway Deployment
+# ✅ Start FastAPI
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))  # Railway provides dynamic PORT
     print(f"🚀 Server starting on http://0.0.0.0:{port} ...")
