@@ -121,7 +121,20 @@ def sentiment_analysis(request: SentimentAnalysisRequest):
         return {"sentiment": sentiment}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))  # ✅ Fixed missing closing parenthesis
-    
+
+ # Serve static files (CSS, JS)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Templates directory
+templates = Jinja2Templates(directory="templates")
+
+class ChatQueryRequest(BaseModel):
+    query: str
+
+@app.get("/", response_class=HTMLResponse)
+async def serve_ui(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
 @app.post("/rag_chat")
 def rag_chat(request: ChatQueryRequest):
     """Handles queries related to the project using RAG."""
