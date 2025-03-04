@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   title: 'Linkedin Text Processor',
   description: 'Professional text processing powered by AI',
 };
-
 export default function RootLayout({
   children,
 }: {
@@ -25,8 +24,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          
+
           <div className="min-h-screen bg-background">
-            <MainNav />
+          
+
+            <MainNav />  {/* Navigation bar */}
+             
+
+            <div className="h-10"></div>  {/* Adds space below navbar */}
             <main>{children}</main>
           </div>
         </ThemeProvider>
@@ -34,3 +40,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+

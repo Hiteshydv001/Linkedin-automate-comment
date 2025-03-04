@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 body {
-    @apply text-white bg-gray-900;
+    @apply bg-background text-foreground;
+    /* ✅ Uses dynamic theme colors */
     font-family: "Inter", sans-serif;
 }
 
@@ -58,6 +59,12 @@ html {
         --input: 20 5.9% 90%;
         --ring: 24.6 95% 53.1%;
         --radius: 0.5rem;
+        --background: 0 0% 100%;
+        /* ✅ Light background */
+        --foreground: 0 0% 10%;
+        /* 🔥 Darker text for visibility */
+        --card-foreground: 0 0% 10%;
+        --popover-foreground: 0 0% 10%;
     }
     .dark {
         --background: 20 14.3% 4.1%;

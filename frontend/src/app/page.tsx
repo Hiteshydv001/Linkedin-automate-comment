@@ -160,58 +160,64 @@ export default function Home() {
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6">
       
       {/* 🚀 Hero Section with Rocket Animation */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-center max-w-2xl"
-      >
-        <h1 className="text-5xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text flex items">
-          Elevate Your LinkedIn Game 
-          <motion.span 
-            animate={{
-              y: [-5, -10, -50],  // Move up
-              opacity: [1, 1, 0],  // Fade out
-            }} 
-            transition={{
-              duration: 2,
-              ease: "easeInOut",
-              repeat: Infinity,  // Keeps repeating
-              repeatDelay: 3,
-            }}
-            className="inline-block ml-2"
-          >
-            🚀
-          </motion.span>
-        </h1>
-        <p className="text-lg text-gray-300 text-center ">
-          AI-powered text processing to craft professional and engaging LinkedIn posts.
-        </p>
-        <Button className="mt-6 px-6 py-3 text-lg bg-blue-500 hover:bg-blue-600">
-          Get Started
-        </Button>
-      </motion.div>
+      {/* 🚀 Hero Section with Rocket Animation */}
+<motion.div 
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8 }}
+  className="text-center max-w-2xl"
+>
+  <h1 className="text-5xl font-extrabold tracking-tight mb-4">
+    <span className="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+      
+      Elevate Your LinkedIn Game 
+    </span>
+    <motion.span 
+      animate={{
+        y: [0, -20, 0],  // Move up and down
+        opacity: [1, 1, 1],  
+      }} 
+      transition={{
+        duration: 2,
+        ease: "easeInOut",
+        repeat: Infinity,  // Keeps repeating
+        repeatDelay: 3,
+      }}
+      className="inline-block ml-2"
+    >
+      🚀
+    </motion.span>
+  </h1>
+  <p className="text-lg text-gray-300 text-center">
+    AI-powered text processing to craft professional and engaging LinkedIn posts.
+  </p>
+  <Button className="mt-6 px-6 py-3 text-lg bg-blue-500 hover:bg-blue-600 rounded-lg shadow-lg">
+    Get Started
+  </Button>
+</motion.div>
+
 
       {/* Features Section */}
       <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {features.map((feature, index) => (
-          <Link key={index} href={feature.href.toString()}>
-            <motion.div
-              whileHover={{ scale: 1.05, boxShadow: "0px 4px 20px rgba(255, 255, 255, 0.2)" }}
-              transition={{ duration: 0.3 }}
-              className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-md border border-white/20 transform transition-all hover:bg-white/20 cursor-pointer"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="p-4 bg-white/10 rounded-full">{feature.icon}</div>
-                <div>
-                  <h3 className="text-xl font-semibold">{feature.title}</h3>
-                  <p className="text-gray-300 mt-2">{feature.description}</p>
-                </div>
-              </div>
-            </motion.div>
-          </Link>
-        ))}
-      </div>
+  {features.map((feature, index) => (
+    <Link key={index} href={feature.href.toString()} className="flex">
+      <motion.div
+        whileHover={{ scale: 1.05, boxShadow: "0px 4px 20px rgba(255, 255, 255, 0.2)" }}
+        transition={{ duration: 0.3 }}
+        className="flex flex-col items-center justify-between w-full h-full bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-md border border-white/20 transform transition-all hover:bg-white/20 cursor-pointer"
+      >
+        <div className="flex flex-col items-center space-y-4">
+          <div className="p-4 bg-white/10 rounded-full">{feature.icon}</div>
+          <div className="text-center">
+            <h3 className="text-xl font-semibold">{feature.title}</h3>
+            <p className="text-gray-300 mt-2">{feature.description}</p>
+          </div>
+        </div>
+      </motion.div>
+       </Link>
+       ))}
+     </div>
+
       
     </main>
   );
