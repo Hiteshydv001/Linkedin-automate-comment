@@ -185,7 +185,7 @@ export default function Home() {
       }}
       className="inline-block ml-2"
     >
-      🚀
+      
     </motion.span>
   </h1>
   <p className="text-lg text-gray-300 text-center">
@@ -217,7 +217,29 @@ export default function Home() {
        </Link>
        ))}
      </div>
+      {/* Use Cases Section */}
+       <section className="py-20 px-6 text-center">
+        <h2 className="text-3xl font-bold">Who Can Benefit?</h2>
+        <p className="text-lg mt-4">Perfect for professionals, content creators, and businesses.</p>
+      </section>
 
+      {/* Testimonials Section */}
+      <section className="py-20 px-6 text-center bg-gray-900">
+        <h2 className="text-3xl font-bold">What Our Users Say</h2>
+        <div className="mt-8">
+          <p className="text-lg italic">"This tool helped me increase my LinkedIn engagement by 3x!"</p>
+          <p className="text-sm mt-2">- Happy User</p>
+        </div>
+      </section>
+
+      {/* Final Call-to-Action */}
+      <section className="py-20 text-center">
+        <h2 className="text-3xl font-bold">Start Enhancing Your LinkedIn Today!</h2>
+        <button className="mt-6 px-6 py-3 bg-orange-500 rounded-lg text-white font-semibold hover:bg-orange-600">
+          Get Started
+        </button>
+      </section>
+    
       
     </main>
   );
