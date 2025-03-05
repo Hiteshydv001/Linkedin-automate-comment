@@ -68,7 +68,8 @@ export default function Home()
         ))}
       </div>
     </main>
-  ); */
+  );
+
   /*return (
     <div className="container mx-auto px-4 py-12">
       <div className="text-center mb-12">
@@ -161,13 +162,13 @@ export default function Home() {
       
       {/* 🚀 Hero Section with Rocket Animation */}
       {/* 🚀 Hero Section with Rocket Animation */}
-<motion.div 
-  initial={{ opacity: 0, y: -20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8 }}
-  className="text-center max-w-2xl"
->
-  <h1 className="text-5xl font-extrabold tracking-tight mb-4">
+    <motion.div 
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+    className="text-center max-w-2xl"
+    >
+    <h1 className="text-5xl font-extrabold tracking-tight mb-4">
     <span className="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
       
       Elevate Your LinkedIn Game 
@@ -185,21 +186,21 @@ export default function Home() {
       }}
       className="inline-block ml-2"
     >
-      🚀
+      
     </motion.span>
-  </h1>
-  <p className="text-lg text-gray-300 text-center">
+    </h1>
+    <p className="text-lg text-gray-300 text-center">
     AI-powered text processing to craft professional and engaging LinkedIn posts.
-  </p>
-  <Button className="mt-6 px-6 py-3 text-lg bg-blue-500 hover:bg-blue-600 rounded-lg shadow-lg">
+    </p>
+    <Button className="mt-6 px-6 py-3 text-lg bg-blue-500 hover:bg-blue-600 rounded-lg shadow-lg">
     Get Started
-  </Button>
-</motion.div>
+    </Button>
+    </motion.div>
 
 
       {/* Features Section */}
       <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-  {features.map((feature, index) => (
+    {features.map((feature, index) => (
     <Link key={index} href={feature.href.toString()} className="flex">
       <motion.div
         whileHover={{ scale: 1.05, boxShadow: "0px 4px 20px rgba(255, 255, 255, 0.2)" }}
@@ -217,8 +218,32 @@ export default function Home() {
        </Link>
        ))}
      </div>
+       {/* Use Cases Section */}
+       <section className="py-20 px-6 text-center">
+        <h2 className="text-3xl font-bold">Who Can Benefit?</h2>
+        <p className="text-lg mt-4">Perfect for professionals, content creators, and businesses.</p>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 px-6 text-center bg-gray-900">
+        <h2 className="text-3xl font-bold">What Our Users Say</h2>
+        <div className="mt-8">
+          <p className="text-lg italic">"This tool helped me increase my LinkedIn engagement by 3x!"</p>
+          <p className="text-sm mt-2">- Happy User</p>
+        </div>
+      </section>
+
+      {/* Final Call-to-Action */}
+      <section className="py-20 text-center">
+        <h2 className="text-3xl font-bold">Start Enhancing Your LinkedIn Today!</h2>
+        <button className="mt-6 px-6 py-3 bg-orange-500 rounded-lg text-white font-semibold hover:bg-orange-600">
+          Get Started
+        </button>
+      </section>
+    
 
       
     </main>
   );
 }
+
