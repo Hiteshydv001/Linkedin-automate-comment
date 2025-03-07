@@ -12,5 +12,5 @@ class SummarizeTool(AgentBase):
             f"{text}\n\nSummary:"
         )
 
-        summary = self.call_gemini(prompt, model="gemini-pro")
+        summary = self.call_gemini(prompt, model="1.5-flash")
         return summary

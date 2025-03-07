@@ -11,5 +11,5 @@ class SentimentAnalysisAgent(AgentBase):
             "and provide a concise summary:\n\n"
             f"Text: {text}\n\nSentiment:"
         )
-        sentiment = self.call_gemini(prompt, model="gemini-pro")
+        sentiment = self.call_gemini(prompt, model="1.5-flash")
         return sentiment

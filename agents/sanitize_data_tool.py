@@ -12,5 +12,5 @@ class SanitizeDataTool(AgentBase):
             f"{data}\n\nSanitized Data:"
         )
 
-        sanitized_data = self.call_gemini(prompt, model="gemini-pro")
+        sanitized_data = self.call_gemini(prompt, model="1.5-flash")
         return sanitized_data

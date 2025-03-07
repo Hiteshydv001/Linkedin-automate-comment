@@ -11,5 +11,5 @@ class GenerateCommentAgent(AgentBase):
             "write a professional, insightful, and engaging comment:\n\n"
             f"Post: {post_content}\n\nGenerated Comment:"
         )
-        comment = self.call_gemini(prompt, model="gemini-pro")
+        comment = self.call_gemini(prompt, model="1.5-flash")
         return comment

@@ -27,7 +27,7 @@ class AgentBase(ABC):
     def execute(self, *args, **kwargs):
         pass
 
-    def call_gemini(self, prompt, model="gemini-pro"):
+    def call_gemini(self, prompt):
         """Calls Gemini AI with retries, backoff, and caching to avoid rate limits."""
         if not GEMINI_API_KEY:
             raise ValueError(f"[{self.name}] GEMINI_API_KEY is missing. Check environment variables.")
@@ -43,10 +43,10 @@ class AgentBase(ABC):
         while retries < self.max_retries:
             try:
                 if self.verbose:
-                    print(f"[{self.name}] Sending prompt to Gemini ({model}): {prompt}")
+                    print(f"[{self.name}] Sending prompt to Gemini (1.5-flash): {prompt}")
 
                 # Create a model instance
-                gemini_model = genai.GenerativeModel(model)
+                gemini_model = genai.GenerativeModel("1.5-flash")
                 response = gemini_model.generate_content(prompt)
 
                 if response and hasattr(response, "text"):
@@ -71,10 +71,5 @@ class AgentBase(ABC):
                     break  # Stop retrying for non-rate-limit errors
 
             retries += 1
-
-        # If `gemini-pro` fails, try `gemini-lite` as a fallback
-        if model == "gemini-pro":
-            print(f"[{self.name}] Switching to 'gemini-lite' due to failures.")
-            return self.call_gemini(prompt, model="gemini-lite")
 
         raise Exception(f"[{self.name}] Failed to get response from Gemini after {self.max_retries} retries.")

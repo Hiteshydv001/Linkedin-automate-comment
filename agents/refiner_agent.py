@@ -13,5 +13,5 @@ class RefinerAgent(AgentBase):
             f"{draft}\n\nRefined LinkedIn Post:"
         )
         
-        refined_post = self.call_gemini(prompt, model="gemini-pro")
+        refined_post = self.call_gemini(prompt, model="1.5-flash")
         return refined_post

@@ -16,5 +16,5 @@ class WritePostValidatorAgent(AgentBase):
         )
 
         # Call Gemini to validate the article
-        validation = self.call_gemini(prompt, model="gemini-pro")
+        validation = self.call_gemini(prompt, model="1.5-flash")
         return validation

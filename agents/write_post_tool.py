@@ -14,5 +14,5 @@ class WritePostTool(AgentBase):
         prompt += "Post:\n"
 
         # Call Gemini to generate the LinkedIn post
-        post = self.call_gemini(prompt, model="gemini-pro")
+        post = self.call_gemini(prompt, model="1.5-flash")
         return post
