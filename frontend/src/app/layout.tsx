@@ -1,15 +1,16 @@
-import './globals.css';
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MainNav } from "@/components/main-nav";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Linkedin Text Processor',
-  description: 'Professional text processing powered by AI',
+  title: "LinkedIn Text Processor",
+  description: "Professional text processing powered by AI",
 };
+
 export default function RootLayout({
   children,
 }: {
@@ -17,28 +18,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          
-
-          <div className="min-h-screen bg-background">
-          
-
-            <MainNav />  {/* Navigation bar */}
-             
-
-            <div className="h-10"></div>  {/* Adds space below navbar */}
-            <main>{children}</main>
+      <body className={`${inter.className} bg-background text-foreground transition-colors duration-300`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <div className="min-h-screen flex flex-col">
+            <MainNav />
+            <main className="flex-grow">{children}</main>
           </div>
         </ThemeProvider>
       </body>
     </html>
   );
 }
-
-
