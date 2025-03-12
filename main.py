@@ -1,30 +1,35 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import uvicorn
 import os
 from dotenv import load_dotenv
-from agents import AgentManager
+import uvicorn
 from typing import List
 
-# ✅ Load environment variables from .env
+from rag.query_handler import answer_query
+
+
+# Assuming agents.py exists in your project
+from agents import AgentManager
+
+# Load environment variables from .env
 load_dotenv()
 
 app = FastAPI()
 
-# ✅ Enable CORS (Modify `allow_origins` for security)
+# Enable CORS (adjust allow_origins for production security)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this to specific frontend URL if needed
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ Initialize the agent manager
+# Initialize the agent manager (assumes agents.py exists)
 agent_manager = AgentManager()
 
-# ✅ Request Models
+# Request Models
 class SummarizeRequest(BaseModel):
     text: str
 
@@ -48,12 +53,15 @@ class GenerateCommentRequest(BaseModel):
 class SentimentAnalysisRequest(BaseModel):
     text: str
 
-# ✅ Health Check Route
+class ChatQueryRequest(BaseModel):
+    query: str
+
+# Health Check Route
 @app.get("/")
 def home():
     return {"message": "LinkedIn Automation API is running!"}
 
-# ✅ API Routes
+# API Routes for LinkedIn Automation Features
 @app.post("/summarize")
 def summarize(request: SummarizeRequest):
     try:
@@ -98,14 +106,12 @@ def validate_post(request: ValidatePostRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/generate_comments")  # ✅ Fixed endpoint name
+@app.post("/generate_comments")
 def generate_comments(request: GenerateCommentRequest):
     try:
         comments = agent_manager.get_agent("generate_comment").execute(request.post_content)
-        
-        if not isinstance(comments, list):  # ✅ Ensure response is a list
-            comments = [comments]  # Convert single string to a list
-        
+        if not isinstance(comments, list):
+            comments = [comments]
         return {"comments": comments}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating comments: {str(e)}")
@@ -116,10 +122,18 @@ def sentiment_analysis(request: SentimentAnalysisRequest):
         sentiment = agent_manager.get_agent("sentiment_analysis").execute(request.text)
         return {"sentiment": sentiment}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))  # ✅ Fixed missing closing parenthesis
+        raise HTTPException(status_code=500, detail=str(e))
 
-# ✅ Start FastAPI with Uvicorn for Railway Deployment
+# RAG Chatbot Route
+@app.post("/rag_chat")
+def rag_chat(request: ChatQueryRequest):
+    try:
+        response = answer_query(request.query)
+        return {"response": response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))  # Railway provides dynamic PORT
+    port = int(os.getenv("PORT", 8000))
     print(f"🚀 Server starting on http://0.0.0.0:{port} ...")
     uvicorn.run(app, host="0.0.0.0", port=port)
