@@ -1,0 +1,216 @@
+openvoiceos/
+├── .env.sample             # Template for all environment variables
+├── .gitignore              # Standard git ignore file
+├── CONTRIBUTING.md         # Guidelines for community contributors
+├── LICENSE                 # Your chosen open-source license (e.g., MIT)
+├── README.md               # Main project documentation
+├── docker-compose.yml      # Orchestrates all services for local development
+│
+├── .github/                # GitHub-specific files for project management
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   └── feature_request.md
+│   └── workflows/
+│       └── ci.yml          # Continuous Integration workflow (linting, testing)
+│
+├── api/                    # The Management API (FastAPI)
+│   ├── Dockerfile                  # Builds the API's Docker image
+│   ├── alembic.ini                 # Alembic (database migration) configuration
+│   ├── main.py                     # FastAPI app entrypoint, ties routers together
+│   ├── requirements.txt            # Python dependencies for the API
+│   │
+│   ├── alembic/                    # Directory for database migration scripts
+│   │   ├── versions/               # Folder for migration files (initially empty)
+│   │   ├── env.py
+│   │   └── script.py.mako
+│   │
+│   ├── app/                        # Main application source code
+│   │   ├── __init__.py
+│   │   ├── crud.py                 # CRUD (Create, Read, Update, Delete) database logic
+│   │   ├── database.py             # Database session and engine setup
+│   │   ├── dependencies.py         # Reusable dependencies (e.g., get_db, get_current_user)
+│   │   ├── models.py               # SQLAlchemy ORM models (User, Agent, CallLog, etc.)
+│   │   ├── schemas.py              # Pydantic models for request/response validation
+│   │   │
+│   │   ├── core/                   # Core logic and configuration
+│   │   │   ├── __init__.py
+│   │   │   ├── config.py           # Loads settings from environment variables
+│   │   │   └── security.py         # Password hashing, JWT token creation, key encryption
+│   │   │
+│   │   └── routers/                # API endpoint definitions (routes)
+│   │       ├── __init__.py
+│   │       ├── agents.py           # Endpoints for /agents
+│   │       ├── calls.py            # Endpoints for initiating calls
+│   │       ├── keys.py             # Endpoints for managing provider keys
+│   │       └── users.py            # Endpoints for authentication /users
+│   │
+│   └── tests/                      # Unit and integration tests for the API
+│       ├── __init__.py
+│       ├── test_agents_api.py
+│       └── test_users_api.py
+│
+├── engine/                 # The Core Voice Engine (Python Worker)
+│   ├── Dockerfile                  # Builds the engine's Docker image
+│   ├── main.py                     # A lightweight FastAPI wrapper to receive tasks from the `api` service
+│   ├── requirements.txt            # Python dependencies for the engine
+│   │
+│   ├── openvoiceos_engine/         # The main Python package for the engine (adapted from Bolna)
+│   │   ├── __init__.py
+│   │   ├── agent_manager/
+│   │   │   ├── __init__.py
+│   │   │   ├── assistant_manager.py
+│   │   │   ├── base_manager.py
+│   │   │   └── task_manager.py
+│   │   ├── agent_types/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_agent.py
+│   │   │   ├── contextual_conversational_agent.py
+│   │   │   ├── extraction_agent.py
+│   │   │   ├── graph_agent.py
+│   │   │   ├── graph_based_conversational_agent.py
+│   │   │   ├── knowledgebase_agent.py
+│   │   │   ├── summarization_agent.py
+│   │   │   └── webhook_agent.py
+│   │   ├── classification/
+│   │   │   ├── __init__.py
+│   │   │   ├── classification.py
+│   │   │   └── deberta.py
+│   │   ├── helpers/
+│   │   │   ├── __init__.py
+│   │   │   ├── analytics_helpers.py
+│   │   │   ├── cache_helpers.py
+│   │   │   ├── function_calling_helpers.py
+│   │   │   ├── logger_config.py
+│   │   │   ├── mark_event_meta_data.py
+│   │   │   ├── observable_variable.py
+│   │   │   ├── utils.py
+│   │   │   └── vad.py
+│   │   ├── input_handlers/
+│   │   │   ├── __init__.py
+│   │   │   ├── daily_webcall.py
+│   │   │   ├── default.py
+│   │   │   ├── telephony.py
+│   │   │   └── telephony_providers/
+│   │   │       ├── __init__.py
+│   │   │       ├── exotel.py
+│   │   │       ├── plivo.py
+│   │   │       └── twilio.py
+│   │   ├── llms/
+│   │   │   ├── __init__.py
+│   │   │   ├── llm.py
+│   │   │   ├── litellm.py
+│   │   │   └── openai_llm.py
+│   │   ├── memory/
+│   │   │   ├── __init__.py
+│   │   │   └── cache/
+│   │   │       ├── __init__.py
+│   │   │       ├── base_cache.py
+│   │   │       ├── inmemory_scalar_cache.py
+│   │   │       └── vector_cache.py
+│   │   ├── output_handlers/
+│   │   │   ├── __init__.py
+│   │   │   ├── daily_webcall.py
+│   │   │   ├── default.py
+│   │   │   ├── telephony.py
+│   │   │   └── telephony_providers/
+│   │   │       ├── __init__.py
+│   │   │       ├── exotel.py
+│   │   │       ├── plivo.py
+│   │   │       └── twilio.py
+│   │   ├── synthesizer/
+│   │   │   ├── __init__.py
+│   │   │   ├── azure_synthesizer.py
+│   │   │   ├── base_synthesizer.py
+│   │   │   ├── cartesia_synthesizer.py
+│   │   │   ├── deepgram_synthesizer.py
+│   │   │   ├── elevenlabs_synthesizer.py
+│   │   │   ├── openai_synthesizer.py
+│   │   │   ├── polly_synthesizer.py
+│   │   │   ├── rime_synthesizer.py
+│   │   │   ├── sarvam_synthesizer.py
+│   │   │   └── smallest_synthesizer.py
+│   │   ├── transcriber/
+│   │   │   ├── __init__.py
+│   │   │   ├── azure_transcriber.py
+│   │   │   ├── base_transcriber.py
+│   │   │   ├── bodhi_transcriber.py
+│   │   │   ├── deepgram_transcriber.py
+│   │   │   └── whisper_transcriber.py
+│   │   ├── constants.py
+│   │   ├── models.py               # Pydantic models defining agent JSON structure
+│   │   ├── prompts.py
+│   │   └── providers.py
+│   │
+│   └── telephony_server/           # A dedicated server for handling telephony provider websockets
+│       ├── Dockerfile.telephony
+│       ├── requirements.txt
+│       ├── twilio_server.py
+│       └── plivo_server.py
+│
+└── ui/                     # The UI Playground (Next.js)
+    ├── Dockerfile                  # Builds the Next.js production app
+    ├── .eslintrc.json              # ESLint configuration
+    ├── next-env.d.ts               # Next.js TypeScript declarations
+    ├── next.config.js              # Next.js configuration
+    ├── package.json                # Node.js dependencies and scripts
+    ├── postcss.config.js           # PostCSS configuration (used by Tailwind)
+    ├── tailwind.config.ts          # Tailwind CSS configuration
+    ├── tsconfig.json               # TypeScript configuration
+    │
+    ├── public/                     # Static assets
+    │   ├── favicon.ico
+    │   └── logo.svg
+    │
+    └── src/                        # Main application source code
+        ├── app/                    # Next.js App Router
+        │   ├── (auth)/             # Route group for authentication pages (layout without sidebar)
+        │   │   ├── login/
+        │   │   │   └── page.tsx
+        │   │   ├── register/
+        │   │   │   └── page.tsx
+        │   │   └── layout.tsx
+        │   │
+        │   ├── (dashboard)/        # Route group for the main application after login (layout with sidebar)
+        │   │   ├── agents/
+        │   │   │   ├── [agentId]/    # Dynamic route for a specific agent
+        │   │   │   │   └── page.tsx  # The agent editor/playground page
+        │   │   │   └── page.tsx      # The page listing all agents
+        │   │   ├── logs/
+        │   │   │   └── page.tsx      # Page for call logs
+        │   │   ├── keys/
+        │   │   │   └── page.tsx      # Page for managing API keys
+        │   │   ├── settings/
+        │   │   │   └── page.tsx      # User settings page
+        │   │   └── layout.tsx        # The main dashboard layout (with sidebar, navbar)
+        │   │
+        │   ├── api/                  # Next.js API routes (e.g., for auth callbacks)
+        │   │   └── auth/
+        │   │       └── [...nextauth]/
+        │   │           └── route.ts
+        │   │
+        │   ├── globals.css         # Global CSS styles
+        │   ├── layout.tsx          # The root layout of the entire application
+        │   └── page.tsx            # The landing page
+        │
+        ├── components/             # Reusable React components
+        │   ├── ui/                 # Basic UI elements (Button, Input, Card, etc.)
+        │   │   ├── button.tsx
+        │   │   ├── card.tsx
+        │   │   ├── input.tsx
+        │   │   └── label.tsx
+        │   ├── AgentCard.tsx
+        │   ├── AgentEditor.tsx     # The main component for building an agent
+        │   ├── CallLogTable.tsx
+        │   ├── CallModal.tsx       # Modal to initiate a call
+        │   ├── Navbar.tsx
+        │   ├── Sidebar.tsx
+        │   └── ThemeToggle.tsx
+        │
+        ├── hooks/                  # Custom React hooks
+        │   └── use-auth.ts
+        │
+        └── lib/                    # Library code, helpers, and utilities
+            ├── api.ts              # Centralized functions for calling your backend API
+            ├── auth.ts             # Authentication configuration (e.g., NextAuth.js)
+            ├── types.ts            # TypeScript type definitions
+            └── utils.ts            # Utility functions

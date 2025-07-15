@@ -1,0 +1,7 @@
+fastapi==0.95.1
+uvicorn==0.21.1
+pandas==2.0.0
+plotly==5.14.1
+google-generativeai==0.3.2
+qdrant-client==1.1.0
+python-dotenv==1.0.0
